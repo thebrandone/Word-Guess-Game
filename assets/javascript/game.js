@@ -27,8 +27,10 @@ var splitGenWord = [];
 var underscoreWord = [];
 //a string of the above array
 var stringUnderscoreWord;
-//this variable is to check to see if the word equals the genword
+//this variable is used later to check to see if the word equals the genword
 var winCheckWord;
+
+//turns the letters of the random word into underscores
 for (i = 0; i < genWord.length; i++) {
     splitGenWord.push(genWord.charAt(i));
     underscoreWord.push("_");
@@ -50,175 +52,87 @@ document.onkeyup = function (event) {
         userGuess === "v" || userGuess === "w" || userGuess === "x" ||
         userGuess === "y" || userGuess === "z") {
 
-            //gets the key the users presses
-            //var userGuess = event.key;
+        //gets the key the users presses
+        //var userGuess = event.key;
 
-            //this function adds the pressed key to the array and then displays it onto the page
-            //it also updates the two variables
-            function pusher() {
-                guessesDone.push(userGuess);
-                jGuessesDone.textContent += guessesDone[guessesMade] + " ";
-                guessesMade++;
-                guessesLeft--;
-            }
+        //this function adds the pressed key to the array and then displays it onto the page
+        //for the letters already guessed, it also updates the two variables
+        function pusher() {
+            guessesDone.push(userGuess);
+            jGuessesDone.textContent += guessesDone[guessesMade] + " ";
+            guessesMade++;
+            guessesLeft--;
+        }
 
-            //this function replaces the underscores with correct guesses
-            function replacer() {
-                underscoreWord[splitGenWord.indexOf(userGuess)] = userGuess;
-                //this is in case the letter occurs more than once in the array
-                underscoreWord[splitGenWord.lastIndexOf(userGuess)] = userGuess;
-                stringUnderscoreWord = underscoreWord.join(" ");
-                winCheckWord = underscoreWord.join("");
-                jWord.textContent = stringUnderscoreWord;
-                jGuessesLeft.textContent = guessesLeft;                
-            }
+        //this function replaces the underscores with correct guesses
+        function replacer() {
+            underscoreWord[splitGenWord.indexOf(userGuess)] = userGuess;
+            //this line of code below is in case the letter occurs more than once in the array
+            //this will not work if there are more than two of the same letter in a word
+            underscoreWord[splitGenWord.lastIndexOf(userGuess)] = userGuess;
+            stringUnderscoreWord = underscoreWord.join(" ");
+            winCheckWord = underscoreWord.join("");
+            jWord.textContent = stringUnderscoreWord;
+            jGuessesLeft.textContent = guessesLeft;
+        }
 
-            //winners everything
-            function clear() {
-                jWins.textContent = wins;
-                guessesLeft = 13;
-                guessesDone = [];
-                guessesMade = 0;
-                genWord = words[Math.floor(Math.random() * words.length)];
-                splitGenWord = [];
-                underscoreWord = [];
-                stringUnderscoreWord;
-                jWord.textContent = "";
-                jGuessesDone.textContent = "";
-                jGuessesLeft.textContent = guessesLeft;
-                for (i = 0; i < genWord.length; i++) {
-                    splitGenWord.push(genWord.charAt(i));
-                    underscoreWord.push("_");
-                    jWord.textContent += underscoreWord[i] + " ";
-                    
-                }
+        //clears everything back to the starting values
+        function clear() {
+            jWins.textContent = wins;
+            guessesLeft = 13;
+            guessesDone = [];
+            guessesMade = 0;
+            genWord = words[Math.floor(Math.random() * words.length)];
+            splitGenWord = [];
+            underscoreWord = [];
+            stringUnderscoreWord;
+            jWord.textContent = "";
+            jGuessesDone.textContent = "";
+            jGuessesLeft.textContent = guessesLeft;
+            for (i = 0; i < genWord.length; i++) {
+                splitGenWord.push(genWord.charAt(i));
+                underscoreWord.push("_");
+                jWord.textContent += underscoreWord[i] + " ";
 
-            }
-            function winner() {
-                wins++
-                clear();
             }
 
-            //pardon the long list of repeating code, i can't think of a dry solution
-            if (guessesLeft === 13) {
+        }
+
+        //a clear but adds a win
+        function winner() {
+            wins++
+            clear();
+        }
+
+
+        //all the code below goes through each keypress and examines what should happen
+        //depending on what key is pressed
+        if (guessesLeft === 13) {
+            pusher();
+            if (guessesDone.indexOf(userGuess) != -1) {
+                replacer();
+                if (winCheckWord === genWord) {
+                    winner();
+                }
+            }
+        }
+        for (k = 12; k > 0; k--) {
+            //if guessesLeft === 12,11,10, etc AND if the guess hasn't been made already
+            if (guessesLeft === k && guessesDone.indexOf(userGuess) === -1) {
                 pusher();
+                //if the guess is made
                 if (guessesDone.indexOf(userGuess) != -1) {
                     replacer();
+                    //if the word is fully guessed
                     if (winCheckWord === genWord) {
                         winner();
                     }
                 }
             }
-            if (guessesLeft === 12 && guessesDone.indexOf(userGuess) === -1){
-                pusher();
-                if (guessesDone.indexOf(userGuess) != -1) {
-                    replacer();
-                    if (winCheckWord === genWord) {
-                        winner();
-                    }
-                }
-            }
-            if (guessesLeft === 11 && guessesDone.indexOf(userGuess) === -1){
-                pusher();
-                if (guessesDone.indexOf(userGuess) != -1) {
-                    replacer();
-                    if (winCheckWord === genWord) {
-                        winner();
-                    }
-                }
-            }
-            if (guessesLeft === 10 && guessesDone.indexOf(userGuess) === -1){
-                pusher();
-                if (guessesDone.indexOf(userGuess) != -1) {
-                    replacer();
-                    if (winCheckWord === genWord) {
-                        winner();
-                    }
-                }
-            }
-            if (guessesLeft === 9 && guessesDone.indexOf(userGuess) === -1){
-                pusher();
-                if (guessesDone.indexOf(userGuess) != -1) {
-                    replacer();
-                    if (winCheckWord === genWord) {
-                        winner();
-                    }
-                }
-            }
-            if (guessesLeft === 8 && guessesDone.indexOf(userGuess) === -1){
-                pusher();
-                if (guessesDone.indexOf(userGuess) != -1) {
-                    replacer();
-                    if (winCheckWord === genWord) {
-                        winner();
-                    }
-                }
-            }
-            if (guessesLeft === 7 && guessesDone.indexOf(userGuess) === -1){
-                pusher();
-                if (guessesDone.indexOf(userGuess) != -1) {
-                    replacer();
-                    if (winCheckWord === genWord) {
-                        winner();
-                    }
-                }
-            }
-            if (guessesLeft === 6 && guessesDone.indexOf(userGuess) === -1){
-                pusher();
-                if (guessesDone.indexOf(userGuess) != -1) {
-                    replacer();
-                    if (winCheckWord === genWord) {
-                        winner();
-                    }
-                }
-            }
-            if (guessesLeft === 5 && guessesDone.indexOf(userGuess) === -1){
-                pusher();
-                if (guessesDone.indexOf(userGuess) != -1) {
-                    replacer();
-                    if (winCheckWord === genWord) {
-                        winner();
-                    }
-                }
-            }
-            if (guessesLeft === 4 && guessesDone.indexOf(userGuess) === -1){
-                pusher();
-                if (guessesDone.indexOf(userGuess) != -1) {
-                    replacer();
-                    if (winCheckWord === genWord) {
-                        winner();
-                    }
-                }
-            }
-            if (guessesLeft === 3 && guessesDone.indexOf(userGuess) === -1){
-                pusher();
-                if (guessesDone.indexOf(userGuess) != -1) {
-                    replacer();
-                    if (winCheckWord === genWord) {
-                        winner();
-                    }
-                }
-            }
-            if (guessesLeft === 2 && guessesDone.indexOf(userGuess) === -1){
-                pusher();
-                if (guessesDone.indexOf(userGuess) != -1) {
-                    replacer();
-                    if (winCheckWord === genWord) {
-                        winner();
-                    }
-                }
-            }
-            if (guessesLeft === 1 && guessesDone.indexOf(userGuess) === -1){
-                pusher();
-                if (guessesDone.indexOf(userGuess) != -1) {
-                    replacer();
-                    if (winCheckWord === genWord) {
-                        winner();
-                    }   
-                }
-            }
-            if (guessesLeft === 0) {
-                clear();
-            }
+        }
+        //clear if out of guesses
+        if (guessesLeft === 0) {
+            clear();
+        }
     }
 }
