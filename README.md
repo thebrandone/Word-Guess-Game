@@ -1,4 +1,5 @@
 # Word-Guess-Game
+[Click here](https://thebrandone.github.io/Word-Guess-Game/) for a deployed link!
 
 ## Summary
 This application was created as a way to learn and test my skills with Javascript. It is a Hangman game coded around key presses. Try to guess the letters in the word and see how many wins you can get!
